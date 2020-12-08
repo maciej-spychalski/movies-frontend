@@ -2,6 +2,7 @@ package pl.asbt.moviesfrontend.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.asbt.moviesfrontend.config.MoviesStorageConfig;
@@ -37,7 +38,7 @@ public class ItemClient {
                 .toUri();
         try {
             return restTemplate.postForObject(url, itemDto, ItemDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return new ItemDto();
@@ -51,7 +52,7 @@ public class ItemClient {
         try {
             ItemDto[] itemsDto = restTemplate.getForObject(url, ItemDto[].class);
             return Arrays.asList(ofNullable(itemsDto).orElse(new ItemDto[0]));
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return new ArrayList<>();
@@ -64,7 +65,7 @@ public class ItemClient {
                 .toUri();
         try {
             restTemplate.put(url, itemDto);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -77,7 +78,7 @@ public class ItemClient {
                 .toUri();
         try {
             restTemplate.delete(url);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }

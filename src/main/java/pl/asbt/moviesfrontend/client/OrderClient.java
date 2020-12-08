@@ -2,18 +2,13 @@ package pl.asbt.moviesfrontend.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.asbt.moviesfrontend.config.MoviesStorageConfig;
 import pl.asbt.moviesfrontend.dto.OrderDto;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.Optional.ofNullable;
 
 public class OrderClient {
 
@@ -41,7 +36,7 @@ public class OrderClient {
         //        String url = moviesStorageConfig.getUsersApiEndpoint();
         try {
             restTemplate.postForObject(url, orderDto, OrderDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -55,7 +50,7 @@ public class OrderClient {
         try {
             OrderDto orderDto = restTemplate.getForObject(url, OrderDto.class);
             return orderDto;
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return new OrderDto();
@@ -68,7 +63,7 @@ public class OrderClient {
                 .toUri();
         try {
             restTemplate.put(url, orderDto);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -81,17 +76,9 @@ public class OrderClient {
                 .toUri();
         try {
             restTemplate.delete(url);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
 
-//    public List<OrderDto> filterOrders(String filter) {
-//        String filterLowerCase = filter.toLowerCase();
-//        List<OrderDto> ordersDto = getOrders();
-//        List<OrderDto> ordersFiltered = ordersDto.stream()
-//                .filter(orderDto -> orderDto.getIsFinalized().toString().toLowerCase().contains(filterLowerCase))
-//                .collect(Collectors.toList());
-//        return ordersFiltered;
-//    }
 }

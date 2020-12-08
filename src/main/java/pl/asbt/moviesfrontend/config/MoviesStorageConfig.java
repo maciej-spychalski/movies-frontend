@@ -11,5 +11,7 @@ public class MoviesStorageConfig {
     public static final String ITEMS_API_END_POINT = "http://localhost:8080/v1/storage/items";
     public static final String CARTS_API_END_POINT = "http://localhost:8080/v1/storage/carts";
     public static final String ORDERS_API_END_POINT = "http://localhost:8080/v1/storage/orders";
+    public static final String DESCRIPTION_API_END_POINT = "http://localhost:8080/v1/description";
+    public static final String PASSWORD_GENERATOR_API_END_POINT = "http://localhost:8080/v1/passwordGenerator";
     public static final String ADMIN_CODE = "01123581321";
 }

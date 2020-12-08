@@ -2,6 +2,7 @@ package pl.asbt.moviesfrontend.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.asbt.moviesfrontend.config.MoviesStorageConfig;
@@ -35,10 +36,10 @@ public class DirectorClient {
                 .build()
                 .encode()
                 .toUri();
-        //        String url = moviesStorageConfig.getUsersApiEndpoint();
+
         try {
             restTemplate.postForObject(url, directorDto, DirectorDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -51,7 +52,7 @@ public class DirectorClient {
         try {
             DirectorDto[] directorsDto = restTemplate.getForObject(url, DirectorDto[].class);
             return Arrays.asList(ofNullable(directorsDto).orElse(new DirectorDto[0]));
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return new ArrayList<>();
@@ -64,7 +65,7 @@ public class DirectorClient {
                 .toUri();
         try {
             restTemplate.put(url, directorDto);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -77,7 +78,7 @@ public class DirectorClient {
                 .toUri();
         try {
             restTemplate.delete(url);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }

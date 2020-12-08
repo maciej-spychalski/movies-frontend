@@ -3,6 +3,7 @@ package pl.asbt.moviesfrontend.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.asbt.moviesfrontend.config.MoviesStorageConfig;
@@ -37,10 +38,10 @@ public class UserClient {
                 .build()
                 .encode()
                 .toUri();
-        //        String url = moviesStorageConfig.getUsersApiEndpoint();
+
         try {
             restTemplate.postForObject(url, userDto, UserDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -52,10 +53,10 @@ public class UserClient {
                 .build()
                 .encode()
                 .toUri();
-        //        String url = moviesStorageConfig.getUsersApiEndpoint();
+
         try {
             userDto = restTemplate.getForObject(url, UserDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return userDto;
@@ -69,7 +70,7 @@ public class UserClient {
         try {
             UserDto[] usersDto = restTemplate.getForObject(url, UserDto[].class);
             return Arrays.asList(ofNullable(usersDto).orElse(new UserDto[0]));
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return new ArrayList<>();
@@ -82,7 +83,7 @@ public class UserClient {
                 .toUri();
         try {
             restTemplate.put(url, userDto);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -95,7 +96,7 @@ public class UserClient {
                 .toUri();
         try {
             restTemplate.delete(url);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -122,7 +123,7 @@ public class UserClient {
         try {
             UserDto userDto = restTemplate.postForObject(url, null, UserDto.class);
             return userDto;
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return new UserDto();

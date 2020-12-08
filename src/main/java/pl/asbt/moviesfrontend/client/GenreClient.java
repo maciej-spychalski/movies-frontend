@@ -2,6 +2,7 @@ package pl.asbt.moviesfrontend.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.asbt.moviesfrontend.config.MoviesStorageConfig;
@@ -35,10 +36,10 @@ public class GenreClient {
                 .build()
                 .encode()
                 .toUri();
-        //        String url = moviesStorageConfig.getUsersApiEndpoint();
+
         try {
             restTemplate.postForObject(url, genreDto, GenreDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -51,7 +52,7 @@ public class GenreClient {
         try {
             GenreDto[] genresDto = restTemplate.getForObject(url, GenreDto[].class);
             return Arrays.asList(ofNullable(genresDto).orElse(new GenreDto[0]));
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return new ArrayList<>();
@@ -64,7 +65,7 @@ public class GenreClient {
                 .toUri();
         try {
             restTemplate.put(url, genreDto);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -77,7 +78,7 @@ public class GenreClient {
                 .toUri();
         try {
             restTemplate.delete(url);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }

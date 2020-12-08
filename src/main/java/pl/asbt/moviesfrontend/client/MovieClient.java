@@ -2,6 +2,7 @@ package pl.asbt.moviesfrontend.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.asbt.moviesfrontend.config.MoviesStorageConfig;
@@ -37,7 +38,7 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, movieDto, MovieDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -50,7 +51,7 @@ public class MovieClient {
         try {
             MovieDto[] moviesDto = restTemplate.getForObject(url, MovieDto[].class);
             return Arrays.asList(ofNullable(moviesDto).orElse(new MovieDto[0]));
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return new ArrayList<>();
@@ -63,7 +64,7 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.put(url, movieDto);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -76,7 +77,7 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.delete(url);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -101,7 +102,7 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, directorDto, DirectorDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -116,7 +117,7 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, writerDto, WriterDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -131,7 +132,7 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, writerDto, WriterDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -146,7 +147,7 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, actorDto, ActorDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -161,7 +162,7 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, actorDto, ActorDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -176,7 +177,7 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, genreDto, GenreDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -191,9 +192,8 @@ public class MovieClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, genreDto, GenreDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
-
 }

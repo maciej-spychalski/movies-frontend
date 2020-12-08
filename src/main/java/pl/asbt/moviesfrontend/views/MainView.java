@@ -36,7 +36,6 @@ public class MainView extends VerticalLayout {
         textFieldLogin.setPlaceholder("email");
 
         PasswordField passwordField = new PasswordField("Password");
-//        passwordField.setLabel("Password");
         passwordField.setPlaceholder("password");
 
         Button buttonLogin = new Button("Login");

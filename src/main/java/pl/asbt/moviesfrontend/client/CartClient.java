@@ -2,6 +2,7 @@ package pl.asbt.moviesfrontend.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.asbt.moviesfrontend.config.MoviesStorageConfig;
@@ -9,12 +10,6 @@ import pl.asbt.moviesfrontend.dto.CartDto;
 import pl.asbt.moviesfrontend.dto.OrderDto;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.Optional.ofNullable;
 
 public class CartClient {
 
@@ -32,18 +27,6 @@ public class CartClient {
         return cartClient;
     }
 
-//    public void createCart(CartDto cartDto) {
-//        URI url = UriComponentsBuilder.fromHttpUrl(MoviesStorageConfig.CARTS_API_END_POINT)
-//                .build()
-//                .encode()
-//                .toUri();
-//        try {
-//            restTemplate.postForObject(url, cartDto, CartDto.class);
-//        } catch (Exception e) {
-//            LOGGER.error(e.getMessage(), e);
-//        }
-//    }
-
     public CartDto getCart(Long cartId) {
         URI url = UriComponentsBuilder.fromHttpUrl(MoviesStorageConfig.CARTS_API_END_POINT)
                 .pathSegment(cartId.toString())
@@ -53,7 +36,7 @@ public class CartClient {
         try {
             CartDto cartDto = restTemplate.getForObject(url, CartDto.class);
             return cartDto;
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return new CartDto();
@@ -69,7 +52,7 @@ public class CartClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, new CartDto(), CartDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -85,7 +68,7 @@ public class CartClient {
         try {
             restTemplate.postForObject(url, new CartDto(), CartDto.class);
 
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -99,7 +82,7 @@ public class CartClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, new CartDto(), CartDto.class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -112,7 +95,7 @@ public class CartClient {
                 .toUri();
         try {
             restTemplate.delete(url);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -127,17 +110,8 @@ public class CartClient {
                 .toUri();
         try {
             restTemplate.postForObject(url, new OrderDto(), OrderDto[].class);
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
-
-/*    public List<CartDto> filterCarts(String filter) {
-        String filterLowerCase = filter.toLowerCase();
-        List<CartDto> cartsDto = getCarts();
-        List<CartDto> cartsFiltered = cartsDto.stream()
-                .filter(cartDto -> cartDto.getId().toString().equals(filter))
-                .collect(Collectors.toList());
-        return cartsFiltered;
-    }*/
 }

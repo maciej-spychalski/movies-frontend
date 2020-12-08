@@ -7,10 +7,10 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.router.Route;
 import pl.asbt.moviesfrontend.client.*;
 import pl.asbt.moviesfrontend.domain.User;
@@ -18,7 +18,6 @@ import pl.asbt.moviesfrontend.dto.*;
 import pl.asbt.moviesfrontend.session.SessionVariables;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,10 +27,10 @@ public class ShopView extends VerticalLayout {
     private User currentUser = SessionVariables.getInstance().getCurrentUser();
     private UserClient userClient = UserClient.getInstance();
     private MovieClient movieClient = MovieClient.getInstance();
+    private DescriptionClient descriptionClient = DescriptionClient.getInstance();
     private CartClient cartClient = CartClient.getInstance();
     private OrderClient orderClient = OrderClient.getInstance();
     private ItemClient itemClient = ItemClient.getInstance();
-
     private DirectorClient directorClient = DirectorClient.getInstance();
     private WriterClient writerClient = WriterClient.getInstance();
     private ActorClient actorClient = ActorClient.getInstance();
@@ -44,6 +43,8 @@ public class ShopView extends VerticalLayout {
     private IntegerField movieQuantity = new IntegerField("Quantity");
     private Button addToCart = new Button("Add to Cart");
     private Grid<MovieDto> movieGrid = new Grid<>(MovieDto.class);
+
+    private TextArea movieDescription = new TextArea();
 
     //Cart-Items
     private HorizontalLayout cartLayout = new HorizontalLayout();
@@ -65,6 +66,7 @@ public class ShopView extends VerticalLayout {
     private Grid<OrderDto> orderGrid = new Grid<>(OrderDto.class);
 
     public ShopView() {
+        // Movies
         movieFilter.setPlaceholder("Filter movie");
         movieFilter.setClearButtonVisible(true);
         movieFilter.setValueChangeMode(ValueChangeMode.EAGER);
@@ -113,10 +115,18 @@ public class ShopView extends VerticalLayout {
         }).setHeader("Genres");
         movieGrid.addColumns("duration", "price");
         movieGrid.setSizeFull();
+
         refreshMoviesGrid();
         movieLayout.add(movieGrid, movieFormLayout);
         movieLayout.setSizeFull();
 
+        movieGrid.asSingleSelect().addValueChangeListener(event -> {
+            String movieTitle = movieGrid.asSingleSelect().getValue().getTitle();
+            DescriptionDto descriptionDto = descriptionClient.getDescription(movieTitle);
+            movieDescription.setValue(descriptionDto.getPlot());
+         });
+
+        movieDescription.setSizeFull();
 
         //Cart
         refreshCartGrid();
@@ -134,7 +144,6 @@ public class ShopView extends VerticalLayout {
         deleteItem.addClickListener(action -> {
             ItemDto itemDto = cartGrid.asSingleSelect().getValue();
             cartClient.deleteItem(currentUser.getCartId(), itemDto.getId());
-//            itemClient.deleteItem(itemDto);
             refreshCartGrid();
         });
         makeOrder.addClickListener(action -> {
@@ -175,7 +184,7 @@ public class ShopView extends VerticalLayout {
             SessionVariables.getInstance().setCurrentUser(new User());
             UI.getCurrent().navigate(MainView.class);
         });
-        add(buttonLogout, movieLayout, cartLayout, orderLayout);
+        add(buttonLogout, movieLayout, movieDescription, cartLayout, orderLayout);
         setSizeFull();
     }
 
@@ -196,8 +205,6 @@ public class ShopView extends VerticalLayout {
     public void refreshOrderGrid() {
         UserDto userDto = userClient.getUser(currentUser.getUserId());
         List<OrderDto> ordersDto = userDto.getOrdersDto();
-//                .map(orderId -> orderClient.getOrder(orderId))
-//                .collect(Collectors.toList());
         orderGrid.setItems(ordersDto);
     }
 

@@ -6,7 +6,7 @@ Last backend commit:
 https://github.com/trevize77/movies-backend/commit/d9feb2a6a6cbfd5d4b130215dd07e097b21e10e6
 
 Last frontend commit:
-https://github.com/trevize77/movies-frontend/commit/36e50036b882821e2ee1744bed257aa1503229e8
+https://github.com/trevize77/movies-frontend/commit/4223429261cd7097ecb8293adb05e7f0dc3c1d3f
 
 Backend project
 https://github.com/trevize77/movies-backend
